@@ -1,0 +1,105 @@
+﻿@{
+    ViewData["Title"] = "Contact";
+}
+ 
+ 
+<h2>@ViewData["Title"]</h2>
+<h3>@ViewData["Message"]</h3>
+<script src="~/js/jquery-3.3.1.min.js"></script>
+<script>
+
+    var parameters = { "UserName": "admin", "PassWord": "123456" };
+    $.ajax({
+        url: "http://localhost:5000/system/SysRole/RequestToken",
+        type: "post",
+        data: parameters,
+        timeout: 1000,          // 设置超时时间
+        success: function (data) {
+            if (data != null) {
+                if (data.Code == 10000) {
+                    callback(data);
+                }
+                else if (data.Code == 10002) {
+
+                    bl.msgbox.msg("会话过期，请重新登录", 2000, function () {
+                        location.href = "/Login/Index?returnUrl=" + escape(location.href);
+                    });
+                }
+                else {
+                    if ($.isFunction(errorcallback)) {
+                        errorcallback(data);
+                    }
+
+                }
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, thrown) {
+            console.debug(XMLHttpRequest);
+
+        },
+        complete: function (response, status, xhr) {
+
+        }
+    });
+
+</script>
+<address>
+    One Microsoft Way<br />
+    Redmond, WA 98052-6399<br />
+    <abbr title="Phone">P:</abbr>
+    425.555.0100
+</address>
+
+<div id="vueapp" class="vue-app">
+ 
+</div>
+<script>
+    Vue.use(DropDownTreeInstaller);
+
+    new Vue({
+        el: "#vueapp",
+        data: function () {
+            return {
+                localDataSource: new kendo.data.HierarchicalDataSource({
+                    data: [{
+                        text: 'Furniture',
+                        items: [
+                            { text: 'Tables & Chairs' },
+                            { text: 'Sofas' },
+                            { text: 'Occasional Furniture' }
+                        ]
+                    }, {
+                        text: 'Decor',
+                        items: [
+                            { text: 'Bed Linen' },
+                            { text: 'Curtains & Blinds' },
+                            { text: 'Carpets' }
+                        ]
+                    }]
+                })
+            }
+        },
+        methods: {
+            onDataBound: function (ev) {
+                console.log("Event :: dataBound");
+            },
+            onChange: function (ev) {
+                console.log("Event :: change");
+            },
+            onFiltering: function (ev) {
+                console.log("Event :: filtering");
+            },
+            onOpen: function (ev) {
+                console.log("Event :: open");
+            },
+            onClose: function (ev) {
+                console.log("Event :: close");
+            }
+        }
+    })
+
+</script>
+<address>
+    <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
+    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
+</address>
